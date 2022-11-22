@@ -49,7 +49,7 @@ function myplugin_update_db_check()
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);
 
-    // creamos variables para insertar valores
+    // creamos variables para insertar valores en la tabla
 
     $nombre = 'Dani';
     $texto = 'Buenas tardes';
