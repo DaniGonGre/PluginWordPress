@@ -25,17 +25,18 @@ add_filter('the_content', 'cambiar_malsonantes');
  * Añade una tabla a la Base de datos
  */
 
-function myplugin_update_db_check() {
+function myplugin_update_db_check()
+{
     // Objeto global del WordPress para trabajar con la BD
     global $wpdb;
 
     $charset_collate = $wpdb->get_charset_collate();
 
     // le añado el prefijo a la tabla
-    $table_name = $wpdb->prefix . 'dam';
+    $tablaDam = $wpdb->prefix . 'dam';
 
     // creamos la sentencia sql
-    $sql = "CREATE TABLE $table_name (
+    $sql = "CREATE TABLE $tablaDam (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
         name tinytext NOT NULL,
@@ -45,11 +46,28 @@ function myplugin_update_db_check() {
     ) $charset_collate;";
 
     // libreria que necesito para usar la funcion dbDelta
-    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-    dbDelta( $sql );
-}
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
 
-/**
- * Ejecuta 'myplugin_update_db_check', cuando el plugin se carga
- */
-add_action( 'plugins_loaded', 'myplugin_update_db_check' );
+    // creamos variables para insertar valores
+
+    $nombre = 'Dani';
+    $texto = 'Buenas tardes';
+
+    $resultado = $wpdb->insert(
+        $tablaDam,
+        array(
+            'tiempo' => current_time('mysql'),
+            'nombre' => $nombre,
+            'texto' => $texto,
+        )
+    );
+
+    error_log("Plugin DAM insert: " . $resultado);
+
+    /**
+     * Ejecuta 'myplugin_update_db_check', cuando el plugin se carga
+     */
+    add_action('plugins_loaded', 'myplugin_update_db_check');
+
+}
