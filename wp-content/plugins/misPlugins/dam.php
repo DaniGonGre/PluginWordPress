@@ -25,8 +25,7 @@ add_filter('the_content', 'cambiar_malsonantes');
  * Añade una tabla a la Base de datos
  */
 
-function myplugin_update_db_check()
-{
+function crearTablaConValores() {
     // Objeto global del WordPress para trabajar con la BD
     global $wpdb;
 
@@ -65,9 +64,30 @@ function myplugin_update_db_check()
 
     error_log("Plugin DAM insert: " . $resultado);
 
+}
     /**
      * Ejecuta 'myplugin_update_db_check', cuando el plugin se carga
      */
-    add_action('plugins_loaded', 'myplugin_update_db_check');
+    add_action('plugins_loaded', 'crearTablaConValores');
+
+
+function cambiarPalabrasDeLaTabla ($texto) {
+
+    global $wpdb;
+    $charset_collate = $wpdb->get_charset_collate();
+    $tablaDam = $wpdb->prefix . 'dam';
+
+    // recogemos los datos de la tabla con una sentencia sql
+
+    $resultado = $wpdb->get_results("SELECT * FROM " . $tablaDam, ARRAY_A);
+
+    // hacemos un bucle para recoger el resultado
+    foreach ($resultado as $fila) {
+        error_log("Resultado: " . $fila['time']);
+    }
+
+    return str_replace('Wordpress', 'WordpressDAM', $texto);
 
 }
+
+add_filter('the_content', 'cambiarPalabrasDeLaTabla');
