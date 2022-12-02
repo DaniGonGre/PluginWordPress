@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Cambiar Malsonantes
-Plugin URI: http://wordpress.org/plugins/malsonantes/
+Plugin URI:
 Description: Busca palabras mal sonantes y las cambia por otras más cool.
 Author: Juan Carlos
 Version: 1.0
@@ -12,14 +12,14 @@ Author URI: https://realmadrid.com
 /*
  * Remplaza palabras misPlugins por *
  */
-function cambiar_malsonantes ($text) {
+function cambiarMalsonantes ($text) {
     $palabraMalsonantes = array('joder', 'mierda', 'caca', 'tonto', 'cabron');
     $palabra = str_replace($palabraMalsonantes, '*****', $text);
 
     return $palabra;
 
 }
-add_filter('the_content', 'cambiar_malsonantes');
+add_filter('the_content', 'cambiarMalsonantes');
 
 /*
  * Añade una tabla a la Base de datos
@@ -37,9 +37,9 @@ function crearTablaConValores() {
     // creamos la sentencia sql
     $sql = "CREATE TABLE $tablaDam (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
-        time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-        name tinytext NOT NULL,
-        text text NOT NULL,
+        tiempo datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+        nombre tinytext NOT NULL,
+        texto text NOT NULL,
         url varchar(55) DEFAULT '' NOT NULL,
         PRIMARY KEY (id)
     ) $charset_collate;";
@@ -65,10 +65,11 @@ function crearTablaConValores() {
     error_log("Plugin DAM insert: " . $resultado);
 
 }
-    /**
-     * Ejecuta 'myplugin_update_db_check', cuando el plugin se carga
-     */
-    add_action('plugins_loaded', 'crearTablaConValores');
+/**
+ * Ejecuta 'myplugin_update_db_check', cuando el plugin se carga
+ */
+
+add_action('plugins_loaded', 'crearTablaConValores');
 
 
 function cambiarPalabrasDeLaTabla ($texto) {
